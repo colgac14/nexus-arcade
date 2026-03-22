@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS ARCADE — 2000 Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #04050f;
+    --bg2: #080b1a;
+    --panel: #0d1128;
+    --accent: #00f5ff;
+    --accent2: #ff006e;
+    --accent3: #a855f7;
+    --gold: #ffd700;
+    --text: #c8d8f0;
+    --text-dim: #4a5a7a;
+    --border: #1a2a4a;
+    --card-bg: #0a0f22;
+    --glow: 0 0 20px rgba(0,245,255,0.3);
+    --glow2: 0 0 20px rgba(255,0,110,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ANIMATED GRID BACKGROUND */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridScroll 20s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes gridScroll {
+    from { background-position: 0 0; }
+    to { background-position: 40px 40px; }
+  }
+
+  /* HEADER */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(4, 5, 15, 0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+  }
+
+  .header-inner {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: 70px;
+  }
+
+  .logo {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-shadow: 0 0 30px rgba(0,245,255,0.6);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .logo span { color: var(--accent2); }
+
+  .search-bar {
+    flex: 1;
+    max-width: 600px;
+    position: relative;
+  }
+
+  .search-bar input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.6rem 1rem 0.6rem 2.5rem;
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-bar input:focus {
+    border-color: var(--accent);
+    box-shadow: var(--glow);
+  }
+
+  .search-bar input::placeholder { color: var(--text-dim); }
+
+  .search-icon {
+    position: absolute;
+    left: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    font-size: 1rem;
+  }
+
+  .header-stats {
+    margin-left: auto;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .header-stats .count {
+    color: var(--accent);
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  /* HERO BANNER */
+  .hero {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 3.5rem 2rem 2.5rem;
+    background: linear-gradient(180deg, rgba(0,245,255,0.04) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.8rem;
+  }
+
+  .hero h1 .line1 {
+    color: var(--accent);
+    text-shadow: 0 0 40px rgba(0,245,255,0.5), 0 0 80px rgba(0,245,255,0.2);
+    display: block;
+  }
+
+  .hero h1 .line2 {
+    color: var(--accent2);
+    text-shadow: 0 0 40px rgba(255,0,110,0.5);
+    display: block;
+    font-size: 0.6em;
+    letter-spacing: 0.25em;
+    margin-top: 0.3rem;
+  }
+
+  .hero p {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    max-width: 1600px;
+    margin: 0 auto;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-right: 0.5rem;
+  }
+
+  .filter-btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    padding: 0.35rem 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .filter-btn.active {
+    background: rgba(0,245,255,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 10px rgba(0,245,255,0.2);
+  }
+
+  .sort-select {
+    margin-left: auto;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 3px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* MAIN LAYOUT */
+  .main-layout {
+    position: relative;
+    z-index: 1;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  /* RESULTS BAR */
+  .results-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+
+  .results-count {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  .results-count span { color: var(--accent); }
+
+  .pagination-info {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  /* GAME GRID */
+  .game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  /* GAME CARD */
+  .game-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .game-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    border-color: var(--accent);
+    box-shadow: 0 8px 30px rgba(0,245,255,0.15), 0 0 0 1px rgba(0,245,255,0.1);
+    z-index: 2;
+  }
+
+  .game-card:hover .card-overlay { opacity: 1; }
+
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 16/10;
+    background: var(--panel);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-thumb-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-family: 'Share Tech Mono', monospace;
+    position: relative;
+  }
+
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,245,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .play-btn {
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    padding: 0.5rem 1.2rem;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  .card-info {
+    padding: 0.75rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .card-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+    color: #ddeeff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .card-genre {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-rating {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  .card-year {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+  }
+
+  .card-tag {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.4rem;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 0.15rem 0.4rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .tag-hot { background: var(--accent2); color: white; }
+  .tag-new { background: var(--accent); color: var(--bg); }
+  .tag-top { background: var(--gold); color: var(--bg); }
+
+  /* PAGINATION */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+  }
+
+  .page-btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .page-btn:hover, .page-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,245,255,0.08);
+  }
+
+  .page-btn.active { box-shadow: 0 0 10px rgba(0,245,255,0.2); }
+  .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* LOADING */
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 2rem;
+    gap: 1.5rem;
+  }
+
+  .loading-bar {
+    width: 200px;
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .loading-bar-inner {
+    height: 100%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    animation: loadAnim 1.2s ease-in-out infinite;
+    border-radius: 2px;
+  }
+
+  @keyframes loadAnim {
+    0% { width: 0%; margin-left: 0; }
+    50% { width: 60%; margin-left: 20%; }
+    100% { width: 0%; margin-left: 100%; }
+  }
+
+  .loading-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    animation: blink 1.2s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(4,5,15,0.92);
+    backdrop-filter: blur(10px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    max-width: 600px;
+    width: 90%;
+    padding: 2rem;
+    box-shadow: 0 0 60px rgba(0,245,255,0.15);
+    position: relative;
+    animation: modalIn 0.2s ease-out;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    width: 2rem; height: 2rem;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .modal-close:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  .modal-emoji { font-size: 5rem; text-align: center; margin-bottom: 1rem; display: block; }
+
+  .modal-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-genre {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .modal-desc {
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  .modal-detail { color: var(--text-dim); }
+  .modal-detail span { color: var(--accent); }
+
+  .modal-play {
+    width: 100%;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    padding: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+
+  .modal-play:hover { box-shadow: 0 0 30px rgba(0,245,255,0.4); }
+
+  /* GITHUB BADGE */
+  .github-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 50;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .github-badge:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: var(--glow);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .header-inner { gap: 1rem; }
+    .logo { font-size: 1rem; }
+    .header-stats { display: none; }
+    .filter-bar { padding: 0.8rem 1rem; }
+    .main-layout { padding: 0 1rem 4rem; }
+    .game-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.7rem; }
+    .hero { padding: 2rem 1rem 1.5rem; }
+  }
+
+  /* FEATURED ROW */
+  .section-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 3px;
+    height: 1em;
+    background: var(--accent2);
+    display: inline-block;
+    border-radius: 2px;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+  }
+
+  .no-results .big { font-size: 3rem; margin-bottom: 1rem; display: block; }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">NEXUS<span>ARCADE</span></div>
+    <div class="search-bar">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="Search 2000+ games..." autocomplete="off">
+    </div>
+    <div class="header-stats">
+      <span class="count" id="headerCount">2000</span> GAMES LOADED
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>
+    <span class="line1">NEXUS ARCADE</span>
+    <span class="line2">2000 GAMES · PLAY FREE · NO DOWNLOAD</span>
+  </h1>
+  <p>The ultimate browser gaming hub. Powered by JavaScript. Hosted on GitHub.</p>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">GENRE:</span>
+  <button class="filter-btn active" data-genre="all">ALL</button>
+  <button class="filter-btn" data-genre="Action">Action</button>
+  <button class="filter-btn" data-genre="Adventure">Adventure</button>
+  <button class="filter-btn" data-genre="Puzzle">Puzzle</button>
+  <button class="filter-btn" data-genre="RPG">RPG</button>
+  <button class="filter-btn" data-genre="Racing">Racing</button>
+  <button class="filter-btn" data-genre="Sports">Sports</button>
+  <button class="filter-btn" data-genre="Strategy">Strategy</button>
+  <button class="filter-btn" data-genre="Shooter">Shooter</button>
+  <button class="filter-btn" data-genre="Horror">Horror</button>
+  <button class="filter-btn" data-genre="Arcade">Arcade</button>
+  <button class="filter-btn" data-genre="Simulation">Simulation</button>
+  <button class="filter-btn" data-genre="Fighting">Fighting</button>
+  <select class="sort-select" id="sortSelect">
+    <option value="rating">★ Top Rated</option>
+    <option value="newest">⬆ Newest</option>
+    <option value="oldest">⬇ Oldest</option>
+    <option value="az">A → Z</option>
+    <option value="za">Z → A</option>
+    <option value="random">⚡ Random</option>
+  </select>
+</div>
+
+<!-- MAIN -->
+<div class="main-layout">
+  <div class="results-bar">
+    <div class="results-count">Showing <span id="showCount">0</span> of <span id="totalCount">2000</span> games</div>
+    <div class="pagination-info" id="pageInfo">Page 1 of 1</div>
+  </div>
+
+  <div class="section-label" id="sectionLabel">ALL GAMES</div>
+
+  <div id="loading" class="loading">
+    <div class="loading-bar"><div class="loading-bar-inner"></div></div>
+    <div class="loading-text">LOADING GAME DATABASE...</div>
+  </div>
+
+  <div id="gameGrid" class="game-grid" style="display:none"></div>
+
+  <div id="noResults" class="no-results" style="display:none">
+    <span class="big">🎮</span>
+    No games found. Try a different search.
+  </div>
+
+  <div id="pagination" class="pagination"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <span class="modal-emoji" id="modalEmoji">🎮</span>
+    <div class="modal-title" id="modalTitle">Game Title</div>
+    <div class="modal-genre" id="modalGenre">Genre</div>
+    <div class="modal-desc" id="modalDesc">Description</div>
+    <div class="modal-details" id="modalDetails"></div>
+    <button class="modal-play" id="modalPlay">▶ PLAY NOW</button>
+  </div>
+</div>
+
+<!-- GITHUB BADGE -->
+<a class="github-badge" href="https://github.com" target="_blank">
+  ⬡ View on GitHub
+</a>
+
+<script>
+// =====================
+// GAME DATA GENERATOR
+// 2000 games, all JS
+// =====================
+
+const GENRES = ['Action','Adventure','Puzzle','RPG','Racing','Sports','Strategy','Shooter','Horror','Arcade','Simulation','Fighting','Platformer','Card','Music','Casual'];
+const TAGS = ['hot','new','top',null,null,null,null,null];
+
+const EMOJIS = {
+  Action: ['⚔️','🥊','💥','🔥','🗡️','🛡️','⚡','🏹'],
+  Adventure: ['🗺️','🏔️','🌋','⛵','🧭','🏕️','🦕','🌍'],
+  Puzzle: ['🧩','🔮','🎯','🔐','🧠','♟️','🔑','🎲'],
+  RPG: ['🧙','🐉','⚗️','🏰','👑','🗝️','🦸','🌟'],
+  Racing: ['🏎️','🚀','🏍️','🚂','🛸','🏁','⚡','🚗'],
+  Sports: ['⚽','🏀','🎾','🏒','⚾','🏈','🎿','🥊'],
+  Strategy: ['♟️','🏯','🌐','⚔️','🗺️','🏴','🎯','🔭'],
+  Shooter: ['🔫','🎯','💣','🚀','🔭','💥','🛸','🎮'],
+  Horror: ['👻','🧟','🦇','🕷️','💀','🔦','😱','🌑'],
+  Arcade: ['👾','🕹️','🎮','🌈','⭐','🍄','🏆','🎯'],
+  Simulation: ['🏙️','🚜','✈️','🌱','🏗️','🚢','🏥','🌏'],
+  Fighting: ['🥋','👊','🤺','💪','🥊','⚡','🐉','🔥'],
+  Platformer: ['🍄','🐸','🦊','🌈','⭐','🐧','🌸','🦔'],
+  Card: ['🃏','🎴','♠️','🀄','🎰','💎','🃏','🪄'],
+  Music: ['🎵','🎸','🎹','🥁','🎷','🎺','🎼','🎤'],
+  Casual: ['🌸','🐱','🌺','🎈','🍭','☁️','🌻','🦋']
+};
+
+const ADJ = ['Epic','Legendary','Dark','Neon','Turbo','Hyper','Ultra','Shadow','Cyber','Astro','Blazing','Frozen','Thunder','Steel','Cosmic','Toxic','Phantom','Ancient','Iron','Golden','Crimson','Void','Storm','Crystal','Royal','Eternal','Savage','Pixel','Atomic','Quantum','Warp','Primal','Galactic','Silent','Mystic','Dragon','Night','Dawn','Prime','Super','Mega','Omega','Alpha','Delta','Nova','Stellar','Deep','Wild','Burning','Ghost'];
+
+const NOUNS = ['Quest','Wars','Arena','Runner','Strike','Blast','Clash','Force','Realm','World','Empire','Saga','Legends','Chronicles','Odyssey','Infinity','Rising','Reborn','Assault','Defense','Escape','Mayhem','Fury','Impact','Protocol','System','Core','Zone','Age','Legacy','Frontier','Horizon','Rift','Nexus','Pulse','Storm','Siege','Island','Tower','Kingdom','Planet','Fleet','Shadow','Vortex','Engine','Code','Matrix','Echo','Surge','Drift'];
+
+const DEVS = ['PixelForge','NeonStudio','ArcadeLab','ByteWorks','GridPunk','CircuitGames','VoxelCraft','BitShift','CodeNova','HexForge','ZeroGravity','PulseGames','NightOwl','StarDrift','IronByte','CyberPlay','QuantumGames','ShadowCode','LightSpeed','RetroMachine'];
+
+const DESCRIPTIONS = [
+  'A thrilling adventure that tests your reflexes and strategy in equal measure.',
+  'Battle through increasingly difficult waves of enemies in this action-packed experience.',
+  'Use your wits and cunning to solve intricate puzzles across 50+ levels.',
+  'Build your empire from scratch and conquer the known world in this epic strategy game.',
+  'Race against the clock across 30 dynamic tracks with realistic physics.',
+  'An immersive RPG with deep lore, hundreds of quests, and a living open world.',
+  'Survive the horror as you unravel the mystery hidden deep within the old mansion.',
+  'Team up or go head-to-head in this fast-paced competitive multiplayer experience.',
+  'Craft your hero, choose your class, and embark on a journey of legendary proportions.',
+  'Dodge, dash, and destroy in this bullet-hell arcade madness with retro visuals.',
+  'Manage resources, build cities, and lead your civilization to victory.',
+  'Unleash devastating combos and master the art of one-on-one combat.',
+  'Platform your way through 100 hand-crafted levels filled with secrets and surprises.',
+  'Outthink your opponents with strategy, bluffing, and perfect timing.',
+  'A rhythm game that tests your musical instincts across 200+ tracks.',
+  'Chill out, collect, and customize in this relaxing casual experience.',
+];
+
+function generateGames(count = 2000) {
+  const games = [];
+  const usedNames = new Set();
+
+  for (let i = 0; i < count; i++) {
+    const genre = GENRES[i % GENRES.length];
+    let title;
+    let attempts = 0;
+    do {
+      const adj = ADJ[Math.floor(Math.random() * ADJ.length)];
+      const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
+      const suffix = Math.random() > 0.6 ? ` ${Math.floor(Math.random() * 5) + 2}` : (Math.random() > 0.5 ? ': ' + ADJ[Math.floor(Math.random() * ADJ.length)] + ' ' + NOUNS[Math.floor(Math.random() * NOUNS.length)] : '');
+      title = `${adj} ${noun}${suffix}`;
+      attempts++;
+      if (attempts > 10) { title = `${adj} ${noun} #${i}`; break; }
+    } while (usedNames.has(title));
+    usedNames.add(title);
+
+    const emojiArr = EMOJIS[genre] || EMOJIS['Arcade'];
+    const emoji = emojiArr[Math.floor(Math.random() * emojiArr.length)];
+    const rating = (Math.random() * 2 + 3).toFixed(1); // 3.0 - 5.0
+    const year = Math.floor(Math.random() * 10) + 2015;
+    const tag = TAGS[Math.floor(Math.random() * TAGS.length)];
+    const dev = DEVS[Math.floor(Math.random() * DEVS.length)];
+    const players = ['1 Player','2 Players','Multiplayer','Co-op'][Math.floor(Math.random() * 4)];
+    const desc = DESCRIPTIONS[Math.floor(Math.random() * DESCRIPTIONS.length)];
+    const hue = Math.floor(Math.random() * 360);
+
+    games.push({ id: i + 1, title, genre, emoji, rating: parseFloat(rating), year, tag, dev, players, desc, hue });
+  }
+
+  return games;
+}
+
+// =====================
+// APP STATE
+// =====================
+const PAGE_SIZE = 60;
+let allGames = [];
+let filteredGames = [];
+let currentPage = 1;
+let activeGenre = 'all';
+let searchQuery = '';
+let sortMode = 'rating';
+
+// =====================
+// RENDER
+// =====================
+function getBgGradient(hue) {
+  return `linear-gradient(135deg, hsl(${hue},60%,8%) 0%, hsl(${(hue+60)%360},50%,12%) 100%)`;
+}
+
+function renderCard(game) {
+  const tagHtml = game.tag
+    ? `<div class="card-tag tag-${game.tag}">${game.tag}</div>`
+    : '';
+  const stars = '★'.repeat(Math.round(game.rating)) + '☆'.repeat(5 - Math.round(game.rating));
+
+  return `
+    <div class="game-card" data-id="${game.id}">
+      <div class="card-thumb">
+        <div class="card-thumb-inner" style="background:${getBgGradient(game.hue)}">
+          ${game.emoji}
+        </div>
+        <div class="card-overlay">
+          <button class="play-btn">▶ PLAY</button>
+        </div>
+        ${tagHtml}
+      </div>
+      <div class="card-info">
+        <div class="card-title" title="${game.title}">${game.title}</div>
+        <div class="card-meta">
+          <div class="card-genre">${game.genre}</div>
+          <div class="card-rating">${game.rating.toFixed(1)}</div>
+        </div>
+        <div class="card-year">${game.dev} · ${game.year}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderGrid() {
+  const grid = document.getElementById('gameGrid');
+  const loading = document.getElementById('loading');
+  const noResults = document.getElementById('noResults');
+  const pagination = document.getElementById('pagination');
+
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const pageGames = filteredGames.slice(start, end);
+  const totalPages = Math.ceil(filteredGames.length / PAGE_SIZE);
+
+  loading.style.display = 'none';
+
+  if (filteredGames.length === 0) {
+    grid.style.display = 'none';
+    noResults.style.display = 'block';
+    pagination.innerHTML = '';
+    return;
+  }
+
+  noResults.style.display = 'none';
+  grid.style.display = 'grid';
+  grid.innerHTML = pageGames.map(renderCard).join('');
+
+  document.getElementById('showCount').textContent = filteredGames.length;
+  document.getElementById('totalCount').textContent = allGames.length;
+  document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+  document.getElementById('headerCount').textContent = allGames.length;
+
+  // Section label
+  const label = activeGenre === 'all' ? 'ALL GAMES' : activeGenre.toUpperCase() + ' GAMES';
+  document.getElementById('sectionLabel').textContent = label + (searchQuery ? ` · SEARCH: "${searchQuery}"` : '');
+
+  // Pagination
+  renderPagination(totalPages);
+
+  // Card click handlers
+  grid.querySelectorAll('.game-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const game = allGames.find(g => g.id === parseInt(card.dataset.id));
+      if (game) openModal(game);
+    });
+  });
+}
+
+function renderPagination(totalPages) {
+  const pagination = document.getElementById('pagination');
+  if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+
+  let html = '';
+  html += `<button class="page-btn" id="prevBtn" ${currentPage === 1 ? 'disabled' : ''}>‹ PREV</button>`;
+
+  const range = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) range.push(i);
+  } else {
+    range.push(1);
+    if (currentPage > 3) range.push('...');
+    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) range.push(i);
+    if (currentPage < totalPages - 2) range.push('...');
+    range.push(totalPages);
+  }
+
+  range.forEach(r => {
+    if (r === '...') {
+      html += `<span style="color:var(--text-dim);padding:0 0.3rem;font-family:monospace">…</span>`;
+    } else {
+      html += `<button class="page-btn ${r === currentPage ? 'active' : ''}" data-page="${r}">${r}</button>`;
+    }
+  });
+
+  html += `<button class="page-btn" id="nextBtn" ${currentPage === totalPages ? 'disabled' : ''}>NEXT ›</button>`;
+  pagination.innerHTML = html;
+
+  pagination.querySelectorAll('[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentPage = parseInt(btn.dataset.page);
+      renderGrid();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  document.getElementById('prevBtn')?.addEventListener('click', () => {
+    if (currentPage > 1) { currentPage--; renderGrid(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  });
+  document.getElementById('nextBtn')?.addEventListener('click', () => {
+    if (currentPage < totalPages) { currentPage++; renderGrid(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  });
+}
+
+// =====================
+// FILTER + SORT
+// =====================
+function applyFiltersAndSort() {
+  let games = [...allGames];
+
+  if (activeGenre !== 'all') games = games.filter(g => g.genre === activeGenre);
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    games = games.filter(g =>
+      g.title.toLowerCase().includes(q) ||
+      g.genre.toLowerCase().includes(q) ||
+      g.dev.toLowerCase().includes(q)
+    );
+  }
+
+  if (sortMode === 'rating') games.sort((a, b) => b.rating - a.rating);
+  else if (sortMode === 'newest') games.sort((a, b) => b.year - a.year);
+  else if (sortMode === 'oldest') games.sort((a, b) => a.year - b.year);
+  else if (sortMode === 'az') games.sort((a, b) => a.title.localeCompare(b.title));
+  else if (sortMode === 'za') games.sort((a, b) => b.title.localeCompare(a.title));
+  else if (sortMode === 'random') games.sort(() => Math.random() - 0.5);
+
+  filteredGames = games;
+  currentPage = 1;
+  renderGrid();
+}
+
+// =====================
+// MODAL
+// =====================
+function openModal(game) {
+  document.getElementById('modalEmoji').textContent = game.emoji;
+  document.getElementById('modalTitle').textContent = game.title;
+  document.getElementById('modalGenre').textContent = game.genre + ' · ' + game.players;
+  document.getElementById('modalDesc').textContent = game.desc;
+  document.getElementById('modalDetails').innerHTML = `
+    <div class="modal-detail">Developer: <span>${game.dev}</span></div>
+    <div class="modal-detail">Year: <span>${game.year}</span></div>
+    <div class="modal-detail">Rating: <span>${'★'.repeat(Math.round(game.rating))} ${game.rating.toFixed(1)}</span></div>
+    <div class="modal-detail">Game ID: <span>#${String(game.id).padStart(4,'0')}</span></div>
+  `;
+  document.getElementById('modalPlay').onclick = () => {
+    alert(`🎮 Launching "${game.title}"!\n\nIn a full deployment, this would open the game.\nHost your game JS files on GitHub Pages and link them here.`);
+  };
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// =====================
+// INIT
+// =====================
+window.addEventListener('DOMContentLoaded', () => {
+  // Generate all 2000 games
+  allGames = generateGames(2000);
+  filteredGames = [...allGames];
+  applyFiltersAndSort();
+
+  // Search
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchQuery = e.target.value.trim();
+    applyFiltersAndSort();
+  });
+
+  // Genre filters
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeGenre = btn.dataset.genre;
+      applyFiltersAndSort();
+    });
+  });
+
+  // Sort
+  document.getElementById('sortSelect').addEventListener('change', e => {
+    sortMode = e.target.value;
+    applyFiltersAndSort();
+  });
+
+  // Modal close
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+});
+</script>
+</body>
+</html>
